@@ -5,4 +5,4 @@
 fair-projects-site
 ==================
 
-This repo contains the source code for the KU FAIR datasets website: `FAIR <https://fair.erda.dk>`_.
+This repo contains the source code for the UCPH FAIR datasets website: `FAIR <https://fair.erda.dk>`_.
