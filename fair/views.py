@@ -1,7 +1,9 @@
 import datetime
 from flask import render_template, request, redirect, jsonify, flash, url_for, session
 from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.datastructures import CombinedMultiDict
 from requests import get, exceptions
+from projects import project_manager
 from projects.models import Project, User
 from fair import fair_blueprint, csrf, oid, app
 from fair.forms import LoginForm, ErdaImportForm
@@ -9,9 +11,49 @@ from fair.conf import config
 from fair.helpers import ErdaHTMLLegacyParser, ErdaHTMLPreTagParser
 
 
-# Ajax request upon erda url import
+@fair_blueprint.route("/create_project", methods=["GET", "POST"])
 @login_required
+def create():
+    erda_form = ErdaImportForm()
+    form_class = project_manager.get_form_class()
+    form = form_class(CombinedMultiDict((request.files, request.form)))
+
+    if form.validate_on_submit():
+        f = form.image.data
+        # Make sure the saved image is filename is unique
+        filename = secure_filename(unique_name_encoding(f.filename))
+        f.save(os.path.join(config.get("PROJECTS", "upload_folder"), filename))
+        # Remove special fields
+        if form.__contains__("csrf_token"):
+            form._fields.pop("csrf_token")
+        form._fields.pop("image")
+        # Save new instance
+        new_instance = {
+            key: field.data
+            for key, field in form.__dict__.items()
+            if hasattr(field, "data")
+        }
+
+        new_instance["image"] = filename
+        entity = Project(**new_instance)
+        entity_id = entity.save()
+        # Update user with new instance
+        current_user.projects.append(entity_id)
+        current_user.save()
+        url = url_for("projects.show", object_id=entity_id, _external=True)
+        flash(
+            "Your submission has been received,"
+            " your metadata can be found at: " + url,
+            "success",
+        )
+        return redirect(url)
+    return render_template("projects/create_project.html", form=form,
+                           erda_form=erda_form)
+
+
+# Ajax request upon erda url import
 @fair_blueprint.route("/erda_import", methods=["POST"])
+@login_required
 def erda_import():
     form = ErdaImportForm(request.form)
     if form.validate_on_submit():
@@ -43,8 +85,8 @@ def erda_import():
     return response
 
 
-@oid.loginhandler
 @fair_blueprint.route("/login", methods=["GET", "POST"])
+@oid.loginhandler
 def login():
     """Does the login via OpenID.  Has to call into `oid.try_login`
     to start the OpenID machinery.
@@ -75,8 +117,8 @@ def login():
     return render_template("fair/login.html", form=form, next=oid.get_next_url())
 
 
-@login_required
 @fair_blueprint.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("projects.projects"))

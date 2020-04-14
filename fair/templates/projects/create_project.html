@@ -19,4 +19,25 @@
     {{ super() }}
 {% endblock %}
 
-{% set item_type='Dataset' %}
+{% if form_field is not defined %}
+    {% from 'base/_formhelpers.html' import form_field %}
+{% endif %}
+{% block content %}
+    {% set item_type='Dataset' %}
+    <div class="container-fluid  mid-section section text-center">
+        <h3 class="margin">ERDA Import</h3>
+        <p>Optional! This feature can import meta data directly from a published
+            <a href="https://erda.dk">ERDA</a> archive
+        </p>
+        <p>Supported fields include. Name, Description & Date</p>
+        <form id="form-erda">
+            <div class="erda-form fair-center">
+                {{ form_field(erda_form.erda_url) }}
+            </div>
+        </form>
+        <img class="loading-spinner"
+             src="{{ url_for('projects_base.static',
+                             filename='gif/light_green_loader.gif') }}" hidden>
+    </div>
+    {{ super() }}
+{% endblock %}
