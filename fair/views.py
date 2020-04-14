@@ -1,8 +1,8 @@
-from flask import render_template, request, jsonify
-from flask_login import login_required, current_user
+from flask import render_template, request, redirect, jsonify, flash, url_for
+from flask_login import login_user, logout_user, login_required, current_user
 from projects_base.base.forms import TagsSearchForm
-from projects.models import Project
-from fair import fair_blueprint, csrf, oid
+from projects.models import Project, User
+from fair import fair_blueprint, csrf, oid, app
 from fair.forms import LoginForm
 from fair.conf import config
 
@@ -78,9 +78,13 @@ def login():
         # Debug mode, allow dummy auth
         if app.debug and form.auth_provider.data == "https://openid.ku.dk":
             user = User.get_with_first("openid", app.config["DEBUG_USER"])
-            login_user(user)
-            flash("Logged in as the debug user", "success")
-            return redirect(url_for("datasets"))
+            if user:
+                login_user(user)
+                flash("Logged in as the debug user", "success")
+                return redirect(url_for("projects.projects"))
+            else:
+                flash("No such user could be found", "warning")
+                return redirect(url_for("projects.projects"))
         logged_in = None
         try:
             logged_in = oid.try_login(form.auth_provider.data)
@@ -95,7 +99,7 @@ def login():
 @fair_blueprint.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("datasets"))
+    return redirect(url_for("projects.projects"))
 
 
 # Called upon successful login openid auth request

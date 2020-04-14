@@ -33,10 +33,11 @@ args = parser.parse_args()
 if __name__ == "__main__":
     # Implement test user
     if args.debug:
-        user = User.get_with_first("email", "test@test.com")
+        app.config["DEBUG_USER"] = "test@test.com"
+        user = User.get_with_first("openid", app.config["DEBUG_USER"])
         if user is None:
             user = User(
-                email="test@test.com",
+                openid="test@test.com",
                 password=hashpw(bytes("test", "utf-8"), gensalt()),
                 projects=[],
                 is_active=True,

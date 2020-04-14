@@ -11,7 +11,6 @@ from flask_nav import Nav
 from projects import base_blueprint, projects_blueprint
 from projects.models import User
 from projects.helpers import load_user
-from projects.nav import nav_bar
 from fair.forms import FairDatasetForm
 from fair.conf import config
 
@@ -59,7 +58,7 @@ mail = Mail(app)
 # Setup navbar
 nav = Nav()
 nav.init_app(app)
-nav.register_element("nav_bar", nav_bar)
+import fair.nav
 import fair.views
 
 app.register_blueprint(fair_blueprint)

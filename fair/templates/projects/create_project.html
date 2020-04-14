@@ -1,0 +1,22 @@
+{% extends "base/create.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('fair.static', filename='fair.css') }}">
+    <script rel="script" type="text/javascript"
+            src="{{ url_for('fair.static', filename='fair.js') }}">
+    </script>
+{% endblock %}
+
+{% block navbar %}
+    <div class="container-full">
+        <div class="banner">
+            <img src="{{ url_for('fair.static',
+             filename='images/banner-logo.jpg') }}">
+        </div>
+    </div>
+    {{ super() }}
+{% endblock %}
+
+{% set item_type='Dataset' %}

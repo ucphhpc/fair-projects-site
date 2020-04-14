@@ -1,9 +1,36 @@
-{% extends "projects/base.html" %}
+{% extends "base/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('fair_static', filename='fair.css') }}">
+          href="{{ url_for('fair.static', filename='fair.css') }}">
     <script type="text/javascript"
-            src="{{ url_for('fair_static', filename='fair.js') }}">
+            src="{{ url_for('fair.static', filename='fair.js') }}">
     </script>
+{% endblock %}
+{# navigation & flashes #}
+{% block navbar %}
+    <div class="container-full">
+        <div class="banner">
+            <img src="{{ url_for('fair.static',
+             filename='images/banner-logo.jpg') }}">
+        </div>
+    </div>
+
+    {{ nav.nav_bar.render() }}
+    {# flashes #}
+    <div class="container">
+        <ul class="flashes" id="flashes">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </ul>
+    </div>
 {% endblock %}

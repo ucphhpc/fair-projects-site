@@ -1,0 +1,33 @@
+{% extends "base/grid.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('fair.static', filename='fair.css') }}">
+    <script rel="script" type="text/javascript"
+            src="{{ url_for('fair.static', filename='fair.js') }}">
+    </script>
+{% endblock %}
+
+{% block navbar %}
+    <div class="container-full">
+        <div class="banner">
+            <img src="{{ url_for('fair.static',
+             filename='images/banner-logo.jpg') }}">
+        </div>
+    </div>
+    {{ super() }}
+{% endblock %}
+
+{% block mid_grid_section %}
+    {% set static_link = 'projects_base.static' %}
+    {% set object_tag_link = 'projects.tag_search' %}
+    {% set search_description = 'This field can be used to search for datasets
+ by using their associated tags' %}
+    {% include 'base/search_section.html' %}
+    {% include 'base/highlight_tags_section.html' %}
+{% endblock %}
+
+{% set grid_header = 'Science Public Datasets'%}
+{% set object_link = 'projects.show' %}
+{% set object_image_link = 'projects_base.img_render' %}

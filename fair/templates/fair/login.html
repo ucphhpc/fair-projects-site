@@ -1,17 +1,19 @@
 {% extends "fair/_fair_base.html" %}
+{% if form_field is not defined %}
+    {% from 'base/_formhelpers.html' import form_field %}
+{% endif %}
 {% block content %}
     <div class="container-full">
         <div class="container-fluid top-section section text-center">
             <h1>Login</h1>
         </div>
-        {% from '_formhelpers.html' import form_field %}
         <div class="container-fluid section bottom-section text-center">
             <img class="loading-spinner"
-                 src="{{ url_for('common_static',
-                 filename='gif/dark_green_loader.gif') }}" hidden>
+                 src="{{ url_for('projects_base.static',
+                    filename='gif/dark_green_loader.gif') }}" hidden>
             <h3 class="margin">Select a valid authentication provider</h3>
             <br/>
-            <div class="submission-form nbi-center">
+            <div class="submission-form center">
                 <form id="form-create" method="POST"
                       enctype="multipart/form-data">
                     {% for field in form %}
