@@ -31,8 +31,8 @@ app.secret_key = os.urandom(24)
 oid = OpenID(
     app,
     safe_roots=[
-        "https://fair.erda.dk",
         "http://fair.erda.dk",
+        "https://fair.erda.dk",
         "https://test-ext.idmc.dk",
     ],
     url_root_as_trust_root=True,
