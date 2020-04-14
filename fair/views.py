@@ -1,32 +1,12 @@
-from flask import render_template, request, redirect, jsonify, flash, url_for
+import datetime
+from flask import render_template, request, redirect, jsonify, flash, url_for, session
 from flask_login import login_user, logout_user, login_required, current_user
-from projects_base.base.forms import TagsSearchForm
+from requests import get, exceptions
 from projects.models import Project, User
 from fair import fair_blueprint, csrf, oid, app
-from fair.forms import LoginForm
+from fair.forms import LoginForm, ErdaImportForm
 from fair.conf import config
-
-
-@fair_blueprint.route("/sci_area_search", methods=["POST"])
-def sci_area_search():
-    form = SciSearchForm(request.form)
-    if form.validate_on_submit():
-        result = {}
-        search_query = request.form["sci_area"]
-        areas = DatasetMeta.get_unique_sci_areas()
-        area_matches = [
-            area
-            for area in areas
-            if str.find(area, search_query, 0, len(area) - 1) != -1
-        ]
-        if len(area_matches) > 0:
-            result = {"sci_area": area_matches}
-
-        return jsonify(data=result)
-
-    response = jsonify(data={"error": form.errors})
-    response.status_code = 400
-    return response
+from fair.helpers import ErdaHTMLLegacyParser, ErdaHTMLPreTagParser
 
 
 # Ajax request upon erda url import

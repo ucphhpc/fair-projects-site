@@ -20,32 +20,6 @@ class ErdaImportForm(FlaskForm):
     )
 
 
-# Used to validate the ajax post search when the user is typing
-class SciSearchForm(FlaskForm):
-    sci_area = StringField(
-        "",
-        validators=[
-            Regexp(
-                regex=r"^[\w ]*$",
-                message="Allowed characters include" " letters and spaces",
-            )
-        ],
-    )
-
-
-class TagsSearchForm(FlaskForm):
-    tag = StringField(
-        "Tags Search",
-        validators=[
-            Regexp(
-                r"^[\w,:_\-* ]*$",
-                message="Allowed tag characters include "
-                "letters spaces and , : _ - *",
-            )
-        ],
-    )
-
-
 class FairDatasetForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     doi = StringField("DOI (Optional)")
