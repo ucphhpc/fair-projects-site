@@ -1,0 +1,14 @@
+version: '3.7'
+
+# Only use this stack for development or debugging,
+# A WSGI stack should be used for production (docker-compose.yml)
+services:
+  web:
+    image: nielsbohr/fair-projects:edge
+    container_name: fair-projects
+    ports:
+      - "80:80/tcp"
+    volumes:
+      - ./persistence:/var/fair-projects/persistence:rw
+      - ./res:/etc/fair-projects/res:ro
+      - ./supervisord-debug.conf:/etc/supervisor/conf.d/supervisord.conf:ro

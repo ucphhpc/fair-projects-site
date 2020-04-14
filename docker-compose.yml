@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  web:
+    image: nielsbohr/fair-projects:latest
+    container_name: fair-projects
+    ports:
+      - "80:80/tcp"
+    volumes:
+      - ./persistence:/var/fair-projects/persistence:rw
+      - ./res:/etc/fair-projects/res:ro
+      - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf:ro

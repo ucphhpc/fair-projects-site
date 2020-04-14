@@ -1,0 +1,195 @@
+.banner img {
+    position: relative;
+    left: 50%;
+    margin-left: -491px;
+}
+
+.jumbotron {
+    margin-top: 1em;
+}
+
+.card-img-top {
+    width: 100%;
+}
+
+.img-fluid {
+    width: 100%;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.h-100 {
+    height: 100% !important;
+}
+
+.d-block {
+    display: block !important;
+}
+
+.grey a {
+    color: gray;
+}
+
+.grey .active a, .grey .active a:hover {
+    background-color: darkgrey;
+}
+
+.fair-left {
+    max-width: 50rem;
+}
+
+.fair-center {
+    max-width: 50rem;
+    margin: auto;
+}
+
+.section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+/* Nav pills */
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover {
+    background-color: darkgrey !important;
+}
+
+.nav-pills > li > a {
+    border-style: solid;
+    border-color: darkgrey;
+    border-width: 1px;
+    margin: 0.5rem;
+}
+
+/* Bootstrap sets a margin of 2px by mistake */
+
+.nav-pills > li + li {
+    margin-left: 0;
+}
+
+.tab-header {
+    margin-bottom: 5rem;
+}
+
+.btn-submit {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    background-color: #8fd182;
+    border-color: #8fd182;
+    color: black;
+}
+
+a, a:hover {
+    color: #ffffff;
+}
+
+.container-full {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.navbar-default {
+    background-color: #ffffff;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+    letter-spacing: 5px;
+}
+
+.navbar-default .navbar-brand {
+    color: #46743c;
+}
+
+.navbar-default .navbar-brand:hover {
+    color: black;
+}
+
+.navbar-default .navbar-nav > li > a {
+    font-size: 1.4rem;
+    color: black;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+    color: #46743c;
+}
+
+.top-section {
+    background-color: #ffffff;
+    color: black;
+}
+
+.mid-section {
+    background-color: #8fd182;
+    color: black;
+}
+
+.bottom-section {
+    background-color: #46743c;
+    color: #ffffff;
+}
+
+.bottom-section-dataset {
+    background-color: white;
+    color: #ffffff;
+}
+
+/* Register Data seach bar */
+
+.datalist {
+    list-style: none;
+    background: white;
+    display: none;
+    height: auto;
+    box-shadow: 0 2px 2px #999;
+    position: relative;
+    top: -15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.datalist:empty {
+    display: none !important;
+}
+
+.datalist li {
+    padding: 3px;
+    color: black;
+}
+
+/* Datasets Overview */
+/* Desktop */
+
+@media (min-width: 768px) {
+    .thumbnail {
+        width: 280px;
+        height: 500px;
+        overflow: hidden;
+        border-color: #8fd182;
+        border-width: 2px;
+    }
+
+    .thumbnail img {
+        height: auto;
+        display: block;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .thumbnail {
+        height: 500px;
+        overflow: hidden;
+        border-color: #8fd182;
+        border-width: 2px;
+    }
+
+    .thumbnail img {
+        height: 300px;
+        display: block;
+    }
+}

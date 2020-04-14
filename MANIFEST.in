@@ -1,0 +1,4 @@
+# Instructs setup.py which package data should be include in the installation
+recursive-include fair/static *
+recursive-include fair/templates *
+recursive-include res *
