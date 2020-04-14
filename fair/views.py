@@ -1,97 +1,13 @@
 from flask import render_template, request, jsonify
 from flask_login import login_required, current_user
-from fair import fair_blueprint, csrf, oid
 from projects_base.base.forms import TagsSearchForm
 from projects.models import Project
-from fair.forms import fairProjectForm, fairProjectSearchForm
+from fair import fair_blueprint, csrf, oid
+from fair.forms import LoginForm
 from fair.conf import config
 
 
-@fair_blueprint.route("/")
-@fair_blueprint.route("/index", methods=["GET"])
-def projects():
-    area_choices = fairProjectForm.area.kwargs.get("choices")
-    form = TagsSearchForm()
-    entities = Project.get_all()
-    tags = Project.get_top_with("tags", num=5)
-    return render_template(
-        "fair/projects.html",
-        title=config.get("PROJECTS", "title"),
-        grid_header="{}".format(config.get("PROJECTS", "title")),
-        tags=list(tags.keys()),
-        areas=area_choices,
-        objects=entities,
-        form=form,
-    )
-
-
-@fair_blueprint.route("/index", methods=["POST"])
-def projects_post():
-    form = fairProjectSearchForm(request.form)
-    if form.validate():
-        if form.__contains__("csrf_token"):
-            form._fields.pop("csrf_token")
-        projects = Project.get_all()
-        for key, value in form.data.items():
-            if value:
-                # Reduce dataset by attribute values
-                projects = Project.get_with_attr(key, value, collection=projects)
-        entities = [entity.serialize() for entity in projects]
-        return jsonify(data={"projects": entities})
-
-    response = jsonify(
-        data={
-            "danger": ", ".join(
-                [msg for attr, errors in form.errors.items() for msg in errors]
-            )
-        }
-    )
-    response.status_code = 400
-    return response
-
-
-@fair_blueprint.route("/my_projects", methods=["GET"])
-@login_required
-def my_projects():
-    area_choices = fairProjectForm.area.kwargs.get("choices")
-    form = TagsSearchForm()
-    entities = [
-        project for project in Project.get_all() if project._id in current_user.projects
-    ]
-    return render_template(
-        "fair/projects.html",
-        title=config.get("PROJECTS", "title"),
-        grid_header="{}".format(config.get("PROJECTS", "title")),
-        areas=area_choices,
-        objects=entities,
-        form=form,
-    )
-
-
-@fair_blueprint.route("/tag/<tag>", methods=["GET"])
-def tag_search(tag):
-    area_choices = fairProjectForm.area.kwargs.get("choices")
-    form = TagsSearchForm(data={"tag": tag}, csrf_enabled=False)
-    entities = {}
-    tags = Project.get_top_with("tags", num=5)
-    if form.validate():
-        entities = Project.get_with_search("tags", form.tag.data)
-
-    # Create new form that has csrf -> enable that tag searches can be done
-    # via the returned form
-    form = TagsSearchForm(data={"tag": tag})
-    return render_template(
-        "fair/projects.html",
-        title=config.get("PROJECTS", "title"),
-        grid_header="{}".format(config.get("PROJECTS", "title")),
-        tags=list(tags.keys()),
-        areas=area_choices,
-        objects=entities,
-        form=form,
-    )
-
-
-@app.route("/sci_area_search", methods=["POST"])
+@fair_blueprint.route("/sci_area_search", methods=["POST"])
 def sci_area_search():
     form = SciSearchForm(request.form)
     if form.validate_on_submit():
@@ -114,8 +30,8 @@ def sci_area_search():
 
 
 # Ajax request upon erda url import
-@app.route("/erda_import", methods=["POST"])
 @login_required
+@fair_blueprint.route("/erda_import", methods=["POST"])
 def erda_import():
     form = ErdaImportForm(request.form)
     if form.validate_on_submit():
@@ -147,8 +63,8 @@ def erda_import():
     return response
 
 
-@app.route("/login", methods=["GET", "POST"])
 @oid.loginhandler
+@fair_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     """Does the login via OpenID.  Has to call into `oid.try_login`
     to start the OpenID machinery.
@@ -172,11 +88,11 @@ def login():
             app.logger.debug("Failed to login {}".format(err))
             return redirect(url_for("login"))
         return logged_in
-    return render_template("login.html", form=form, next=oid.get_next_url())
+    return render_template("fair/login.html", form=form, next=oid.get_next_url())
 
 
-@app.route("/logout")
 @login_required
+@fair_blueprint.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("datasets"))

@@ -1,0 +1,9 @@
+{% extends "projects/base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('fair_static', filename='fair.css') }}">
+    <script type="text/javascript"
+            src="{{ url_for('fair_static', filename='fair.js') }}">
+    </script>
+{% endblock %}

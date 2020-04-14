@@ -1,3 +1,4 @@
 Flask-WTF>=0.14.*
+Flask-OpenID==1.2.*
 wtforms>=2.1.*
 projects-site>=0.0.20

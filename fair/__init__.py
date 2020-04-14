@@ -5,13 +5,14 @@ from flask import Flask, Blueprint
 from flask_wtf import CSRFProtect
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
+from flask_openid import OpenID
 from flask_mail import Mail
 from flask_nav import Nav
 from projects import base_blueprint, projects_blueprint
 from projects.models import User
 from projects.helpers import load_user
 from projects.nav import nav_bar
-from fair.forms import fairProjectForm
+from fair.forms import FairDatasetForm
 from fair.conf import config
 
 app = Flask(__name__)
