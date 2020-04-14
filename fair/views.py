@@ -50,8 +50,9 @@ def create():
             "success",
         )
         return redirect(url)
-    return render_template("projects/create_project.html", form=form,
-                           erda_form=erda_form)
+    return render_template(
+        "projects/create_project.html", form=form, erda_form=erda_form
+    )
 
 
 # Ajax request upon erda url import
